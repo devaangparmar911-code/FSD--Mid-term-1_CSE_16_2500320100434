@@ -5,6 +5,26 @@ const PORT = 3000;
 const students = [];
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.get("/", (req, res) => {
+  res.send("Hello, This server is running thankyou");
+});
+
+app.get("/api/students", (req, res) => {
+  res.json(students);
+});
+
+app.get("/api/students/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const student = students.find((record) => record.id === id);
+
+  if (!student) {
+    return res.status(404).json({ error: `Student with id ${req.params.id} not found.` });
+  }
+
+  return res.json(student);
+});
 
 app.post("/api/students", (req, res) => {
   const { id, name, email, course, age } = req.body ?? {};
