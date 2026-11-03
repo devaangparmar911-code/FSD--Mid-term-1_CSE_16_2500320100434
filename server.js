@@ -1,60 +1,83 @@
-const express = require("express");
-
+const express = require('express');
 const app = express();
-const PORT = 3000;
-const students = [];
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {
-  res.send("Hello, This server is running thankyou");
+const students = [];
+
+app.get('/', (req, res) => {
+    res.send('Server is running');
 });
 
-app.get("/api/students", (req, res) => {
-  res.json(students);
-});
+app.post('/api/students', (req, res) => {
+    const { id, name, email, course, age } = req.body;
 
-app.get("/api/students/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const student = students.find((record) => record.id === id);
+    if (!id || !name || !email || !course || !age) {
+        return res.status(400).json({ error: "All fields are required." });
+    }
 
-  if (!student) {
-    return res.status(404).json({ error: `Student with id ${req.params.id} not found.` });
-  }
+    if (students.find(s => s.id === id)) {
+        return res.status(400).json({ error: "Student ID already exists." });
+    }
 
-  return res.json(student);
-});
+    const newStudent = { id, name, email, course, age };
+    students.push(newStudent);
 
-app.post("/api/students", (req, res) => {
-  const { id, name, email, course, age } = req.body ?? {};
-
-  if (
-    !Number.isInteger(id) ||
-    typeof name !== "string" ||
-    name.trim() === "" ||
-    typeof email !== "string" ||
-    email.trim() === "" ||
-    typeof course !== "string" ||
-    course.trim() === "" ||
-    !Number.isInteger(age) ||
-    age <= 0
-  ) {
-    return res.status(400).json({
-      error: "Student must include an integer id, name, email, course, and positive integer age.",
+    res.status(201).json({
+        message: "Student created successfully",
+        student: newStudent
     });
-  }
-
-  if (students.some((student) => student.id === id)) {
-    return res.status(409).json({ error: `Student with id ${id} already exists.` });
-  }
-
-  const student = { id, name: name.trim(), email: email.trim(), course: course.trim(), age };
-  students.push(student);
-
-  return res.status(201).json(student);
 });
 
-app.listen(PORT, () => {
-  console.log(`Student records server listening on port ${PORT}`);
+app.get('/api/students', (req, res) => {
+    res.status(200).json(students);
+});
+
+app.get('/api/students/:id', (req, res) => {
+    const student = students.find(s => s.id == req.params.id);
+
+    if (!student) {
+        return res.status(404).json({ error: "Student not found." });
+    }
+
+    res.status(200).json(student);
+});
+
+app.put('/api/students/:id', (req, res) => {
+    const student = students.find(s => s.id == req.params.id);
+
+    if (!student) {
+        return res.status(404).json({ error: "Student not found." });
+    }
+
+    const { name, email, course, age } = req.body;
+
+    student.name = name || student.name;
+    student.email = email || student.email;
+    student.course = course || student.course;
+    student.age = age || student.age;
+
+    res.status(200).json({
+        message: "Student updated successfully",
+        student
+    });
+});
+
+app.delete('/api/students/:id', (req, res) => {
+    const index = students.findIndex(s => s.id == req.params.id);
+
+    if (index === -1) {
+        return res.status(404).json({ error: "Student not found." });
+    }
+
+    const deletedStudent = students.splice(index, 1);
+
+    res.status(200).json({
+        message: "Student deleted successfully",
+        student: deletedStudent[0]
+    });
+});
+
+app.listen(3000, () => {
+    console.log('Server listening on port 3000');
 });
