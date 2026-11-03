@@ -1,0 +1,24 @@
+{
+  "name": "fsd--mid-term-1_cse_16_2500320100434",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devaangparmar911-code/FSD--Mid-term-1_CSE_16_2500320100434.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/devaangparmar911-code/FSD--Mid-term-1_CSE_16_2500320100434/issues"
+  },
+  "homepage": "https://github.com/devaangparmar911-code/FSD--Mid-term-1_CSE_16_2500320100434#readme",
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}

@@ -1,0 +1,27 @@
+The repo should contain foloowing files
+
+package.json
+package -lock.json
+gitignore
+server.js
+
+
+task 2 create student records
+implement post/api/students 
+accept student information in JSON format 
+{
+"id" :101,
+"name" : "rahul",
+"email" : "rahul@example.com"
+"course" : "CSE",
+"age" : 20,
+"age" : 20,
+}
+task 1 
+create a node.js project and initalize it using npm init 
+install and configureexpress.js
+configure the server to run on port 3000
+use appropriat middleware , including express.json()
+
+
+and the first commit is also be in git repo
